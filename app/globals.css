@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #0f131f;
+  color: #dce2f2;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Plus Jakarta Sans loaded via next/font */
+.font-sans {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+}
+
+/* Form focus rings using sirius gold */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #eac14b !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

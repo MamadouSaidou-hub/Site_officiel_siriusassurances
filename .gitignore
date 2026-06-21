@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.env*.local
+.env
+.vercel
+.DS_Store
+*.log
+.idea
+.vscode
+next-env.d.ts
