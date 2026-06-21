@@ -1,6 +1,13 @@
 "use client";
 
+import { useFormState, useFormStatus } from "react-dom";
 import { Facebook, Linkedin, Twitter, Send } from "lucide-react";
+import {
+  subscribeNewsletter,
+  type NewsletterState,
+} from "@/app/actions/newsletter";
+
+const initial: NewsletterState = { ok: false, message: "" };
 
 function FooterCol({ title, links }: { title: string; links: string[] }) {
   return (
@@ -19,7 +26,23 @@ function FooterCol({ title, links }: { title: string; links: string[] }) {
   );
 }
 
+function NewsletterSubmit() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      aria-label="S'abonner"
+      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sirius-gold disabled:opacity-60"
+    >
+      <Send size={15} className="text-sirius-bg" />
+    </button>
+  );
+}
+
 export default function Footer() {
+  const [state, action] = useFormState(subscribeNewsletter, initial);
+
   return (
     <footer className="mt-12 border-t border-sirius-border bg-[#0A0E18]">
       <div className="mx-auto grid max-w-container gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
@@ -61,27 +84,34 @@ export default function Footer() {
           <p className="mt-3 text-sm text-sirius-text-dim">
             Recevez nos conseils et actualités du marché de l'assurance.
           </p>
-          <form
-            className="mt-4 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              // TODO: wire to newsletter endpoint
-            }}
-          >
+          <form action={action} className="mt-4 flex gap-2">
+            {/* honeypot */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden
+            />
             <input
               type="email"
+              name="email"
               required
               placeholder="Votre email"
               className="min-w-0 flex-1 rounded-full border border-sirius-border bg-sirius-surface px-4 py-2.5 text-sm text-sirius-text outline-none"
             />
-            <button
-              type="submit"
-              aria-label="S'abonner"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sirius-gold"
-            >
-              <Send size={15} className="text-sirius-bg" />
-            </button>
+            <NewsletterSubmit />
           </form>
+          {state.message && (
+            <p
+              className={`mt-2 text-xs font-semibold ${
+                state.ok ? "text-sirius-gold" : "text-red-400"
+              }`}
+            >
+              {state.message}
+            </p>
+          )}
         </div>
       </div>
 

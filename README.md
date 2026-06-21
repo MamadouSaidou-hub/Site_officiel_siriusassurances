@@ -70,7 +70,7 @@ Defined in `tailwind.config.ts` under `theme.extend.colors.sirius.*`:
 
 - [ ] Hero building photo → `/public/hero.jpg` (800×900)
 - [ ] About interior photo → `/public/about.jpg`
-- [ ] ADN sunset photo → `/public/adn.jpg`
+- [ ] ADN sunset photo → `/public/adn.png`
 - [ ] 3 news cover images → `/public/news/[1,2,3].jpg`
 - [ ] 6 partner logos → `/public/partners/*.svg`
 - [ ] Real phone / email / address in `components/Contact.tsx`

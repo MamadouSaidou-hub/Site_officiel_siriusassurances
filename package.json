@@ -1,6 +1,6 @@
 {
   "name": "sirius-assurances",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,10 +10,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.108.2",
+    "lucide-react": "^0.453.0",
     "next": "14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "lucide-react": "^0.453.0"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.16.10",

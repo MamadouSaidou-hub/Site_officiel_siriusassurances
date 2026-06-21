@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { MapPin, Phone, Mail, Send, type LucideIcon } from "lucide-react";
 import { SectionLabel, SectionTitle } from "./ui";
+import {
+  submitContact,
+  type ContactActionState,
+} from "@/app/actions/contact";
+
+const initialState: ContactActionState = { ok: false, message: "" };
 
 const INFO: { Icon: LucideIcon; label: string; value: string }[] = [
   { Icon: MapPin, label: "Adresse", value: "Dakar, Sénégal — adresse exacte à fournir" },
@@ -11,24 +17,15 @@ const INFO: { Icon: LucideIcon; label: string; value: string }[] = [
 ];
 
 const TYPES = [
-  "Auto / Habitation",
-  "Santé / Vie",
-  "Multirisque Pro",
-  "Construction",
-  "Autre",
+  { value: "auto_habitation", label: "Auto / Habitation" },
+  { value: "sante_vie", label: "Santé / Vie" },
+  { value: "multirisque_pro", label: "Multirisque Pro" },
+  { value: "construction", label: "Construction" },
+  { value: "autre", label: "Autre" },
 ];
 
 export default function Contact() {
-  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("sending");
-    // TODO: wire to /api/contact (Resend, Supabase, or your endpoint)
-    await new Promise((r) => setTimeout(r, 600));
-    setStatus("ok");
-    (e.currentTarget as HTMLFormElement).reset();
-  }
+  const [state, formAction] = useFormState(submitContact, initialState);
 
   return (
     <section id="contact" className="mx-auto max-w-container px-6 py-24 lg:px-10">
@@ -70,29 +67,53 @@ export default function Contact() {
         </div>
 
         {/* Form */}
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form action={formAction} className="space-y-5">
+          {/* Honeypot */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            aria-hidden
+          />
+
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Nom complet" name="name" required placeholder="Mamadou Diallo" />
+            <Field
+              label="Nom complet"
+              name="name"
+              required
+              placeholder="Mamadou Diallo"
+              error={state.fieldErrors?.name?.[0]}
+            />
             <Field
               label="Email"
               name="email"
               type="email"
               required
               placeholder="vous@exemple.com"
+              error={state.fieldErrors?.email?.[0]}
             />
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Téléphone" name="phone" type="tel" placeholder="+221 ..." />
+            <Field
+              label="Téléphone"
+              name="phone"
+              type="tel"
+              placeholder="+221 ..."
+              error={state.fieldErrors?.phone?.[0]}
+            />
             <label className="block">
               <Span>Type d'assurance</Span>
               <select
-                name="type"
+                name="insurance_type"
+                defaultValue=""
                 className="w-full rounded-xl border border-sirius-border bg-sirius-bg px-4 py-3 text-sm text-sirius-text outline-none"
               >
                 <option value="">Sélectionner...</option>
                 {TYPES.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
+                  <option key={o.value} value={o.value}>
+                    {o.label}
                   </option>
                 ))}
               </select>
@@ -107,31 +128,42 @@ export default function Contact() {
               placeholder="Décrivez votre besoin en quelques lignes..."
               className="w-full resize-none rounded-xl border border-sirius-border bg-sirius-bg px-4 py-3 text-sm text-sirius-text outline-none"
             />
+            {state.fieldErrors?.message?.[0] && (
+              <p className="mt-1 text-xs text-red-400">
+                {state.fieldErrors.message[0]}
+              </p>
+            )}
           </label>
 
           <div className="flex flex-wrap items-center gap-4">
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="inline-flex items-center gap-2 rounded-full bg-sirius-gold px-7 py-3.5 text-[15px] font-bold text-sirius-bg disabled:opacity-60"
-            >
-              {status === "sending" ? "Envoi..." : "Envoyer le message"}
-              <Send size={16} />
-            </button>
-            {status === "ok" && (
-              <span className="text-sm font-semibold text-sirius-gold">
-                Message envoyé. Nous revenons vers vous sous 24h.
-              </span>
-            )}
-            {status === "error" && (
-              <span className="text-sm font-semibold text-red-400">
-                Une erreur est survenue. Réessayez ou écrivez-nous directement.
+            <SubmitButton />
+            {state.message && (
+              <span
+                className={`text-sm font-semibold ${
+                  state.ok ? "text-sirius-gold" : "text-red-400"
+                }`}
+              >
+                {state.message}
               </span>
             )}
           </div>
         </form>
       </div>
     </section>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex items-center gap-2 rounded-full bg-sirius-gold px-7 py-3.5 text-[15px] font-bold text-sirius-bg disabled:opacity-60"
+    >
+      {pending ? "Envoi..." : "Envoyer le message"}
+      <Send size={16} />
+    </button>
   );
 }
 
@@ -156,12 +188,14 @@ function Field({
   type = "text",
   required,
   placeholder,
+  error,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
   placeholder?: string;
+  error?: string;
 }) {
   return (
     <label className="block">
@@ -171,8 +205,11 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-sirius-border bg-sirius-bg px-4 py-3 text-sm text-sirius-text outline-none"
+        className={`w-full rounded-xl border bg-sirius-bg px-4 py-3 text-sm text-sirius-text outline-none ${
+          error ? "border-red-400" : "border-sirius-border"
+        }`}
       />
+      {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
     </label>
   );
 }
