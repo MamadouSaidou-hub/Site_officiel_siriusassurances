@@ -1,5 +1,4 @@
 import {
-  Building2,
   MessageSquareQuote,
   ShieldCheck,
   Eye,
@@ -48,17 +47,14 @@ export default function About() {
           </div>
         </div>
 
-        {/* Photo placeholder — replace with <Image /> */}
+        {/* Photo équipe / bureau — fichier dans public/about.jpg */}
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[24px] border border-sirius-border bg-sirius-surface">
-          <div
-            className="flex h-full w-full flex-col items-center justify-center"
-            style={{ background: "linear-gradient(160deg, #1a2a36 0%, #0c1620 100%)" }}
-          >
-            <Building2 size={40} className="text-white/30" strokeWidth={1.5} />
-            <p className="mt-3 text-xs font-semibold text-sirius-text-mute">
-              Photo équipe / bureau à fournir
-            </p>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/about.png"
+            alt="L'équipe Sirius Assurances dans ses bureaux à Dakar"
+            className="h-full w-full object-cover"
+          />
         </div>
       </div>
     </section>
