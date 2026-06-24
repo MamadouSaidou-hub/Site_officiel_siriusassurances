@@ -7,6 +7,9 @@ import {
   Inbox,
   Mail,
   Newspaper,
+  Handshake,
+  Users,
+  UserCog,
   LogOut,
 } from "lucide-react";
 import { logoutAdmin } from "@/app/actions/auth";
@@ -16,10 +19,25 @@ const ITEMS = [
   { href: "/admin/leads", label: "Leads", Icon: Inbox },
   { href: "/admin/newsletter", label: "Newsletter", Icon: Mail },
   { href: "/admin/news", label: "Actualités", Icon: Newspaper },
+  { href: "/admin/partners", label: "Partenaires", Icon: Handshake },
+  { href: "/admin/profile", label: "Mon profil", Icon: UserCog },
 ];
 
-export default function AdminSidebar({ email }: { email: string | null }) {
+export default function AdminSidebar({
+  email,
+  isSuperadmin = false,
+}: {
+  email: string | null;
+  isSuperadmin?: boolean;
+}) {
   const pathname = usePathname();
+
+  const items = isSuperadmin
+    ? [
+        ...ITEMS,
+        { href: "/admin/users", label: "Utilisateurs", Icon: Users },
+      ]
+    : ITEMS;
 
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-sirius-border bg-[#0A0E18]">
@@ -29,7 +47,7 @@ export default function AdminSidebar({ email }: { email: string | null }) {
       </div>
 
       <nav className="flex-1 px-3">
-        {ITEMS.map(({ href, label, Icon }) => {
+        {items.map(({ href, label, Icon }) => {
           const active =
             pathname === href || (href !== "/admin" && pathname.startsWith(href));
           return (

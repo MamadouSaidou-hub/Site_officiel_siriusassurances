@@ -52,7 +52,7 @@ export async function updateSession(request: NextRequest) {
   if (isAdminPath && !isLoginPath && user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("is_admin")
+      .select("is_admin, is_superadmin")
       .eq("id", user.id)
       .single();
 
@@ -60,6 +60,13 @@ export async function updateSession(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("error", "unauthorized");
+      return NextResponse.redirect(url);
+    }
+
+    // /admin/users is superadmin-only
+    if (pathname.startsWith("/admin/users") && !profile.is_superadmin) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
       return NextResponse.redirect(url);
     }
   }

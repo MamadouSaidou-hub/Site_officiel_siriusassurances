@@ -33,6 +33,7 @@ type NewsletterRow = {
   email: string;
   status: "active" | "unsubscribed";
   unsubscribed_at: string | null;
+  unsubscribe_token: string;
 };
 
 type NewsArticleRow = {
@@ -44,10 +45,21 @@ type NewsArticleRow = {
   excerpt: string | null;
   content: string | null;
   cover_url: string | null;
+  video_embed_url: string | null;
+  video_url: string | null;
   tag: string | null;
   published: boolean;
   published_at: string | null;
   author_id: string | null;
+};
+
+type PartnerRow = {
+  id: string;
+  created_at: string;
+  name: string;
+  logo_url: string | null;
+  website: string | null;
+  sort_order: number;
 };
 
 type ProfileRow = {
@@ -55,6 +67,7 @@ type ProfileRow = {
   email: string;
   full_name: string | null;
   is_admin: boolean;
+  is_superadmin: boolean;
   created_at: string;
 };
 
@@ -88,6 +101,7 @@ export type Database = {
           email: string;
           status?: "active" | "unsubscribed";
           unsubscribed_at?: string | null;
+          unsubscribe_token?: string;
         };
         Update: Partial<NewsletterRow>;
         Relationships: [];
@@ -103,12 +117,27 @@ export type Database = {
           excerpt?: string | null;
           content?: string | null;
           cover_url?: string | null;
+          video_embed_url?: string | null;
+          video_url?: string | null;
           tag?: string | null;
           published?: boolean;
           published_at?: string | null;
           author_id?: string | null;
         };
         Update: Partial<NewsArticleRow>;
+        Relationships: [];
+      };
+      partners: {
+        Row: PartnerRow;
+        Insert: {
+          id?: string;
+          created_at?: string;
+          name: string;
+          logo_url?: string | null;
+          website?: string | null;
+          sort_order?: number;
+        };
+        Update: Partial<PartnerRow>;
         Relationships: [];
       };
       profiles: {
@@ -118,6 +147,7 @@ export type Database = {
           email: string;
           full_name?: string | null;
           is_admin?: boolean;
+          is_superadmin?: boolean;
           created_at?: string;
         };
         Update: Partial<ProfileRow>;
@@ -127,6 +157,7 @@ export type Database = {
     Views: Record<string, never>;
     Functions: {
       is_admin: { Args: Record<string, never>; Returns: boolean };
+      is_superadmin: { Args: Record<string, never>; Returns: boolean };
     };
     Enums: {
       lead_status: LeadStatus;

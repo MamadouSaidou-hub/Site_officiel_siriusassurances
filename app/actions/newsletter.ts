@@ -39,3 +39,37 @@ export async function subscribeNewsletter(
 
   return { ok: true, message: "Merci ! Vous êtes bien inscrit(e)." };
 }
+
+export type UnsubscribeState = { ok: boolean; message: string };
+
+/** Mark a subscriber as unsubscribed using their unguessable token. */
+export async function unsubscribeNewsletter(
+  _prev: UnsubscribeState,
+  formData: FormData
+): Promise<UnsubscribeState> {
+  const token = formData.get("token")?.toString() ?? "";
+  // UUID format guard — avoids hitting the DB with junk.
+  const isUuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token);
+  if (!isUuid) {
+    return { ok: false, message: "Lien de désinscription invalide." };
+  }
+
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("newsletter_subscribers")
+    .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
+    .eq("unsubscribe_token", token)
+    .select("email")
+    .maybeSingle();
+
+  if (error) {
+    console.error("[newsletter] unsubscribe failed:", error);
+    return { ok: false, message: "Erreur. Réessayez plus tard." };
+  }
+  if (!data) {
+    return { ok: false, message: "Lien de désinscription invalide ou expiré." };
+  }
+
+  return { ok: true, message: "Vous êtes désinscrit(e). À bientôt !" };
+}

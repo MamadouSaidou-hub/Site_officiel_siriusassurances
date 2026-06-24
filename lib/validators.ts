@@ -51,10 +51,32 @@ export const NewsArticleSchema = z.object({
     .url()
     .optional()
     .or(z.literal("").transform(() => undefined)),
+  // External player URL (YouTube / Vimeo). Uploaded files are handled server-side.
+  video_embed_url: z
+    .string()
+    .url("URL vidéo invalide")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   tag: z.string().trim().max(60).optional().or(z.literal("")),
   published: z.coerce.boolean().default(false),
 });
 export type NewsArticleInput = z.infer<typeof NewsArticleSchema>;
+
+export const PartnerSchema = z.object({
+  name: z.string().trim().min(2, "Nom trop court").max(120),
+  website: z
+    .string()
+    .url("URL invalide")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  logo_url: z
+    .string()
+    .url()
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  sort_order: z.coerce.number().int().min(0).max(9999).default(0),
+});
+export type PartnerInput = z.infer<typeof PartnerSchema>;
 
 export const LeadUpdateSchema = z.object({
   status: z.enum(["new", "contacted", "qualified", "converted", "lost"]),

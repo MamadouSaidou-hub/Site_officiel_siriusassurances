@@ -196,3 +196,6 @@ export const STATS = [
   { value: "15+", label: "Années d'Expérience" },
   { value: "98%", label: "Satisfaction" },
 ];
+
+// NB : les partenaires sont désormais gérés depuis le backoffice (table
+// `partners`) et lus directement dans `components/Partners.tsx`.

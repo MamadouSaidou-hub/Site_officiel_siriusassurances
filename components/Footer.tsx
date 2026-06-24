@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { Facebook, Linkedin, Twitter, Send } from "lucide-react";
+import { Facebook, Linkedin, Twitter, Send, MapPin, Phone, Mail } from "lucide-react";
 import {
   subscribeNewsletter,
   type NewsletterState,
@@ -51,6 +51,36 @@ export default function Footer() {
           <p className="mt-3 text-sm leading-relaxed text-sirius-text-dim">
             Votre courtier d'excellence à Dakar. Expertise, Transparence et Sérénité.
           </p>
+
+          <ul className="mt-5 space-y-2.5">
+            <li className="flex items-start gap-2.5 text-sm text-sirius-text-dim">
+              <MapPin size={15} className="mt-0.5 shrink-0 text-sirius-gold" />
+              <span>
+                Résidence Hacienda, Villa n°13
+                <br />
+                Dakar, Sénégal
+              </span>
+            </li>
+            <li>
+              <a
+                href="tel:+221784237171"
+                className="flex items-center gap-2.5 text-sm text-sirius-text-dim hover:text-white"
+              >
+                <Phone size={15} className="shrink-0 text-sirius-gold" />
+                +221 78 423 71 71
+              </a>
+            </li>
+            <li>
+              <a
+                href="mailto:contact@siriusassurances.com"
+                className="flex items-center gap-2.5 text-sm text-sirius-text-dim hover:text-white"
+              >
+                <Mail size={15} className="shrink-0 text-sirius-gold" />
+                contact@siriusassurances.com
+              </a>
+            </li>
+          </ul>
+
           <div className="mt-5 flex gap-3">
             {[Facebook, Linkedin, Twitter].map((Icon, i) => (
               <a

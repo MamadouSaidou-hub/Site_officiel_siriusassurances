@@ -11,10 +11,23 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: profile } = user
+    ? await supabase
+        .from("profiles")
+        .select("is_superadmin")
+        .eq("id", user.id)
+        .single()
+    : { data: null };
+
   return (
     <div className="flex min-h-screen bg-sirius-bg">
       {/* Sidebar only shown when logged in — login page bypasses via its own layout */}
-      {user && <AdminSidebar email={user.email ?? null} />}
+      {user && (
+        <AdminSidebar
+          email={user.email ?? null}
+          isSuperadmin={!!profile?.is_superadmin}
+        />
+      )}
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
   );

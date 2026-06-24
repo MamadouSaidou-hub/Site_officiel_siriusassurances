@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { MapPin, Phone, Mail, Send, type LucideIcon } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, type LucideIcon } from "lucide-react";
 import { SectionLabel, SectionTitle } from "./ui";
 import {
   submitContact,
@@ -10,10 +10,37 @@ import {
 
 const initialState: ContactActionState = { ok: false, message: "" };
 
-const INFO: { Icon: LucideIcon; label: string; value: string }[] = [
-  { Icon: MapPin, label: "Adresse", value: "Dakar, Sénégal — adresse exacte à fournir" },
-  { Icon: Phone, label: "Téléphone", value: "+221 XX XXX XX XX" },
-  { Icon: Mail, label: "Email", value: "contact@siriusassurances.com" },
+// Précise via coordonnées GPS (l'adresse texte ne géolocalise pas bien à Dakar).
+const MAP_COORDS = "14.736637,-17.420874";
+
+const INFO: {
+  Icon: LucideIcon;
+  label: string;
+  value: string;
+  href?: string;
+}[] = [
+  {
+    Icon: MapPin,
+    label: "Adresse",
+    value: "Résidence Hacienda, Villa n°13\nDakar, Sénégal",
+  },
+  {
+    Icon: Phone,
+    label: "Téléphone",
+    value: "+221 78 423 71 71",
+    href: "tel:+221784237171",
+  },
+  {
+    Icon: Mail,
+    label: "Email",
+    value: "contact@siriusassurances.com",
+    href: "mailto:contact@siriusassurances.com",
+  },
+  {
+    Icon: Clock,
+    label: "Horaires",
+    value: "Lundi – Vendredi : 8h00 – 18h00\nSamedi : 8h00 – 13h00",
+  },
 ];
 
 const TYPES = [
@@ -39,7 +66,7 @@ export default function Contact() {
       <div className="grid gap-8 rounded-3xl border border-sirius-border bg-sirius-surface p-8 lg:grid-cols-[1fr_1.4fr] lg:p-12">
         {/* Info column */}
         <div className="space-y-5">
-          {INFO.map(({ Icon, label, value }) => (
+          {INFO.map(({ Icon, label, value, href }) => (
             <div
               key={label}
               className="flex items-start gap-4 rounded-xl border border-sirius-border bg-sirius-bg p-4"
@@ -51,19 +78,29 @@ export default function Contact() {
                 <p className="text-[11px] font-bold uppercase tracking-wider text-sirius-text-mute">
                   {label}
                 </p>
-                <p className="mt-1 text-sm font-semibold text-sirius-text">{value}</p>
+                {href ? (
+                  <a
+                    href={href}
+                    className="mt-1 block whitespace-pre-line text-sm font-semibold text-sirius-text transition-colors hover:text-sirius-gold"
+                  >
+                    {value}
+                  </a>
+                ) : (
+                  <p className="mt-1 whitespace-pre-line text-sm font-semibold text-sirius-text">
+                    {value}
+                  </p>
+                )}
               </div>
             </div>
           ))}
 
-          <div
-            className="flex aspect-[5/3] items-center justify-center rounded-xl border border-sirius-border"
-            style={{ background: "linear-gradient(135deg, #1a2533 0%, #0d1622 100%)" }}
-          >
-            <span className="text-xs font-semibold text-sirius-text-mute">
-              Carte Google Maps (à intégrer)
-            </span>
-          </div>
+          <iframe
+            title="Localisation Sirius Assurances"
+            src={`https://www.google.com/maps?q=${MAP_COORDS}&z=17&output=embed`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="aspect-[5/3] w-full rounded-xl border border-sirius-border"
+          />
         </div>
 
         {/* Form */}

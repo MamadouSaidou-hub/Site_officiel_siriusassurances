@@ -16,6 +16,8 @@ type Article = {
   excerpt?: string | null;
   content?: string | null;
   cover_url?: string | null;
+  video_embed_url?: string | null;
+  video_url?: string | null;
   tag?: string | null;
   published?: boolean;
 };
@@ -30,6 +32,15 @@ export default function NewsForm({ article }: { article?: Article }) {
     action,
     initial
   );
+
+  // Prefer the cover returned by the last successful update so the preview
+  // reflects a freshly uploaded image immediately, regardless of revalidation.
+  const currentCover = state.coverRemoved
+    ? null
+    : state.coverUrl ?? article?.cover_url ?? null;
+  const currentVideo = state.videoRemoved
+    ? null
+    : state.videoUrl ?? article?.video_url ?? null;
 
   return (
     <form action={formAction} className="space-y-6">
@@ -103,22 +114,101 @@ export default function NewsForm({ article }: { article?: Article }) {
             className="block w-full text-sm text-sirius-text-dim file:mr-3 file:rounded-lg file:border-0 file:bg-sirius-gold file:px-3 file:py-2 file:text-sm file:font-bold file:text-sirius-bg"
           />
         </label>
-        {article?.cover_url && (
+        {currentCover && (
           <div>
             <Span>Couverture actuelle</Span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={article.cover_url}
+              key={currentCover}
+              src={currentCover}
               alt=""
               className="h-24 rounded-lg border border-sirius-border object-cover"
             />
             <input
+              key={currentCover}
               type="hidden"
               name="cover_url"
-              defaultValue={article.cover_url}
+              defaultValue={currentCover}
             />
+            <label className="mt-2 flex items-center gap-2 text-xs text-sirius-text-dim">
+              <input
+                type="checkbox"
+                name="remove_cover"
+                value="true"
+                className="h-3.5 w-3.5 accent-sirius-gold"
+              />
+              Retirer la couverture
+            </label>
           </div>
         )}
+      </div>
+
+      <div className="space-y-5 rounded-xl border border-sirius-border p-5">
+        <p className="text-xs font-bold uppercase tracking-wider text-sirius-text-mute">
+          Vidéo publicitaire (optionnel)
+        </p>
+
+        <label className="block">
+          <Span>Lien YouTube / Vimeo</Span>
+          <input
+            name="video_embed_url"
+            type="url"
+            placeholder="https://www.youtube.com/watch?v=..."
+            defaultValue={article?.video_embed_url ?? ""}
+            className={`w-full rounded-xl border bg-sirius-bg px-4 py-3 text-sm text-sirius-text outline-none ${
+              state.fieldErrors?.video_embed_url
+                ? "border-red-400"
+                : "border-sirius-border"
+            }`}
+          />
+          {state.fieldErrors?.video_embed_url?.[0] && (
+            <p className="mt-1 text-xs text-red-400">
+              {state.fieldErrors.video_embed_url[0]}
+            </p>
+          )}
+        </label>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <label className="block">
+            <Span>Ou uploader un fichier (mp4/webm/mov, max 50MB)</Span>
+            <input
+              type="file"
+              name="video"
+              accept="video/mp4,video/webm,video/ogg,video/quicktime"
+              className="block w-full text-sm text-sirius-text-dim file:mr-3 file:rounded-lg file:border-0 file:bg-sirius-gold file:px-3 file:py-2 file:text-sm file:font-bold file:text-sirius-bg"
+            />
+          </label>
+          {currentVideo && (
+            <div>
+              <Span>Vidéo actuelle</Span>
+              <video
+                key={currentVideo}
+                src={currentVideo}
+                controls
+                className="h-24 rounded-lg border border-sirius-border"
+              />
+              <input
+                key={currentVideo}
+                type="hidden"
+                name="video_url"
+                defaultValue={currentVideo}
+              />
+              <label className="mt-2 flex items-center gap-2 text-xs text-sirius-text-dim">
+                <input
+                  type="checkbox"
+                  name="remove_video"
+                  value="true"
+                  className="h-3.5 w-3.5 accent-sirius-gold"
+                />
+                Retirer la vidéo
+              </label>
+            </div>
+          )}
+        </div>
+        <p className="text-xs text-sirius-text-mute">
+          Si les deux sont renseignés, le lien d'embed est prioritaire à
+          l'affichage. Laisse le lien vide pour le retirer.
+        </p>
       </div>
 
       <div className="flex items-center gap-4 border-t border-sirius-border pt-6">
