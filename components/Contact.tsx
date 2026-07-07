@@ -58,7 +58,7 @@ export default function Contact() {
     <section id="contact" className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="mb-12 text-center">
         <SectionLabel>Contactez-nous</SectionLabel>
-        <SectionTitle className="mx-auto mt-6 max-w-2xl">
+        <SectionTitle onDark className="mx-auto mt-6 max-w-2xl">
           Discutons de vos besoins en assurance
         </SectionTitle>
       </div>

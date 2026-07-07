@@ -100,7 +100,7 @@ export default function Hero() {
             Expertise Dakar &amp; West Africa
           </SectionLabel>
 
-          <h1 className="mt-6 text-[40px] sm:text-[48px] lg:text-[56px] font-extrabold leading-[1.12] text-sirius-text">
+          <h1 className="mt-6 font-serif text-[40px] sm:text-[48px] lg:text-[56px] font-semibold leading-[1.12] text-sirius-text">
             Votre partenaire de{" "}
             <span className="text-sirius-gold">
               confiance
@@ -137,23 +137,16 @@ export default function Hero() {
 
           {/* Stats */}
           <div className="mt-12 flex gap-10 sm:gap-14">
-
             {STATS.map(({ value, label }) => (
-
               <div key={label}>
-
                 <p className="text-2xl font-extrabold text-sirius-gold">
                   {value}
                 </p>
-
                 <p className="mt-1 text-sm font-semibold text-sirius-text-mute">
                   {label}
                 </p>
-
               </div>
-
             ))}
-
           </div>
 
         </div>
@@ -171,6 +164,9 @@ export default function Hero() {
             priority
             className="rounded-[28px] object-cover"
           />
+
+          {/* Dégradé marine discret (bas) pour l'unité avec la palette + lisibilité du badge */}
+          <div className="pointer-events-none absolute inset-2 rounded-[28px] bg-gradient-to-t from-sirius-bg/60 via-transparent to-transparent" />
 
 
           {/* Badge */}

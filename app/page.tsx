@@ -5,7 +5,7 @@ import Personnes from "@/components/Personnes";
 import Dommages from "@/components/Dommages";
 import Specialisees from "@/components/Specialisees";
 import ADN from "@/components/ADN";
-import Missions from "@/components/Missions";
+import Accompagnement from "@/components/Accompagnement";
 import WhyUs from "@/components/WhyUs";
 import News from "@/components/News";
 import Partners from "@/components/Partners";
@@ -23,7 +23,7 @@ export default function Page() {
       <Dommages />
       <Specialisees />
       <ADN />
-      <Missions />
+      <Accompagnement />
       <WhyUs />
       <News />
       <Partners />

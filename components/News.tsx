@@ -54,7 +54,8 @@ export default async function News() {
       : NEWS.map((n) => ({ ...n, cover_url: null, hasVideo: false }));
 
   return (
-    <section id="news" className="mx-auto max-w-container px-6 py-24 lg:px-10">
+    <section id="news" className="bg-sirius-light">
+      <div className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="mb-12 flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <SectionLabel>Notre blog</SectionLabel>
@@ -74,7 +75,7 @@ export default async function News() {
           <a
             key={n.title}
             href={n.href}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-sirius-border bg-sirius-surface transition-all hover:-translate-y-1"
+            className="group flex flex-col overflow-hidden rounded-2xl border border-sirius-light-border bg-sirius-card shadow-[0_1px_3px_rgba(11,27,46,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(11,27,46,0.10)]"
           >
             <div className="relative">
               {n.cover_url ? (
@@ -88,10 +89,10 @@ export default async function News() {
                 <div
                   className="flex aspect-[16/9] items-center justify-center"
                   style={{
-                    background: "linear-gradient(135deg, #1a2533 0%, #0d1622 100%)",
+                    background: "linear-gradient(135deg, #E3EBF3 0%, #D2DEEA 100%)",
                   }}
                 >
-                  <span className="text-[11px] font-semibold text-sirius-text-mute">
+                  <span className="text-[11px] font-semibold text-sirius-ink-mute">
                     Image article 480×280
                   </span>
                 </div>
@@ -108,18 +109,19 @@ export default async function News() {
               <span className="self-start rounded-full bg-sirius-gold/12 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-sirius-gold">
                 {n.tag}
               </span>
-              <h3 className="mt-4 text-base font-bold leading-snug text-sirius-text">
+              <h3 className="mt-4 text-base font-bold leading-snug text-sirius-ink">
                 {n.title}
               </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-sirius-text-dim">
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-sirius-ink-dim">
                 {n.excerpt}
               </p>
-              <p className="mt-4 text-xs font-semibold text-sirius-text-mute">
+              <p className="mt-4 text-xs font-semibold text-sirius-ink-mute">
                 {n.date}
               </p>
             </div>
           </a>
         ))}
+      </div>
       </div>
     </section>
   );

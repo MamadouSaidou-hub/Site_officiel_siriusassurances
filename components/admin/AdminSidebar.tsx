@@ -40,7 +40,7 @@ export default function AdminSidebar({
     : ITEMS;
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-sirius-border bg-[#0A0E18]">
+    <aside className="flex h-screen w-64 flex-col border-r border-sirius-border bg-[#071320]">
       <div className="px-6 py-6">
         <p className="text-lg font-extrabold text-sirius-text">Sirius Admin</p>
         <p className="mt-0.5 text-xs text-sirius-text-mute">Backoffice</p>

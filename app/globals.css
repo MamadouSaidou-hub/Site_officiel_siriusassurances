@@ -8,8 +8,8 @@
 
 html,
 body {
-  background: #0f131f;
-  color: #dce2f2;
+  background: #0b1b2e;
+  color: #eaf1f8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -19,11 +19,16 @@ body {
   font-family: var(--font-jakarta), system-ui, sans-serif;
 }
 
-/* Form focus rings using sirius gold */
+/* Lora (serif) loaded via next/font — titres charte Sirius */
+.font-serif {
+  font-family: var(--font-lora), Georgia, Cambria, serif;
+}
+
+/* Form focus rings using sirius cyan (accent charte) */
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #eac14b !important;
+  border-color: #17a2dc !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

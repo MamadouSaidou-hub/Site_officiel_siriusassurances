@@ -4,7 +4,8 @@ import { WHY_LEFT, WHY_RIGHT } from "@/lib/data";
 
 export default function WhyUs() {
   return (
-    <section className="mx-auto max-w-container px-6 py-24 lg:px-10">
+    <section className="bg-sirius-light">
+      <div className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="mb-12 text-center">
         <SectionLabel>Notre engagement</SectionLabel>
         <SectionTitle className="mx-auto mt-6 max-w-2xl">
@@ -12,7 +13,7 @@ export default function WhyUs() {
         </SectionTitle>
       </div>
 
-      <div className="grid gap-8 rounded-3xl border border-sirius-border bg-sirius-surface p-8 lg:grid-cols-2 lg:p-12">
+      <div className="grid gap-8 rounded-3xl border border-sirius-light-border bg-sirius-card p-8 shadow-[0_1px_3px_rgba(11,27,46,0.06)] lg:grid-cols-2 lg:p-12">
         {[
           { label: "Vos atouts", items: WHY_LEFT },
           { label: "Vos bénéfices", items: WHY_RIGHT },
@@ -31,12 +32,13 @@ export default function WhyUs() {
                       strokeWidth={2.5}
                     />
                   </div>
-                  <span className="text-sm text-sirius-text">{item}</span>
+                  <span className="text-sm text-sirius-ink">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

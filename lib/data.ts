@@ -15,6 +15,10 @@ import {
   MessageSquareQuote,
   Eye,
   Zap,
+  ClipboardCheck,
+  FileText,
+  Umbrella,
+  LineChart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,10 +28,17 @@ export type Offer = {
   desc: string;
 };
 
+export type Etape = {
+  n: string;
+  Icon: LucideIcon;
+  title: string;
+  points: string[];
+};
+
 export const NAV = [
   { label: "Accueil", href: "#", active: true },
   { label: "À propos", href: "#about" },
-  { label: "Missions", href: "#missions" },
+  { label: "Accompagnement", href: "#accompagnement" },
   { label: "Expertises", href: "#personnes" },
   { label: "Actualités", href: "#news" },
   { label: "Contact", href: "#contact" },
@@ -130,21 +141,49 @@ export const ADN_ITEMS: Offer[] = [
   },
 ];
 
-export const MISSIONS = [
+export const ACCOMPAGNEMENT: Etape[] = [
   {
     n: "01",
-    title: "Analyse",
-    desc: "Audit complet de vos risques actuels et identification de vos besoins spécifiques réels.",
+    Icon: ClipboardCheck,
+    title: "Avant le contrat",
+    points: [
+      "Audit et analyse des risques",
+      "Rédaction du cahier des charges",
+      "Mise en concurrence des compagnies",
+      "Recommandation de la meilleure solution",
+    ],
   },
   {
     n: "02",
-    title: "Recherche",
-    desc: "Prospection auprès des meilleures compagnies d'assurances nationales et internationales.",
+    Icon: FileText,
+    title: "Pendant le contrat",
+    points: [
+      "Mise en place des garanties",
+      "Gestion administrative des contrats",
+      "Avenants & modifications",
+      "Optimisation continue des couvertures",
+    ],
   },
   {
     n: "03",
-    title: "Négociation",
-    desc: "Optimisation des tarifs et des conditions contractuelles pour vous garantir le meilleur rapport qualité/prix.",
+    Icon: Umbrella,
+    title: "En cas de sinistre",
+    points: [
+      "Déclaration du sinistre",
+      "Assistance & accompagnement immédiat",
+      "Coordination avec experts & assureurs",
+      "Suivi rigoureux jusqu'à l'indemnisation",
+    ],
+  },
+  {
+    n: "04",
+    Icon: LineChart,
+    title: "Après le sinistre",
+    points: [
+      "Analyse des causes et des impacts",
+      "Recommandations de prévention",
+      "Ajustement de votre programme",
+    ],
   },
 ];
 

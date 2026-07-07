@@ -44,7 +44,7 @@ export default function Footer() {
   const [state, action] = useFormState(subscribeNewsletter, initial);
 
   return (
-    <footer className="mt-12 border-t border-sirius-border bg-[#0A0E18]">
+    <footer className="mt-12 border-t border-sirius-border bg-[#071320]">
       <div className="mx-auto grid max-w-container gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
         <div>
           <p className="text-lg font-extrabold text-sirius-text">Sirius Assurances</p>

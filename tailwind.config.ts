@@ -6,20 +6,32 @@ const config: Config = {
     extend: {
       colors: {
         sirius: {
-          bg: "#0F131F",
-          surface: "#161A26",
-          surface2: "#0D2F3B",
-          gold: "#EAC14B",
-          "gold-soft": "#D9CC7D",
-          text: "#DCE2F2",
-          "text-dim": "rgba(220,226,242,0.62)",
-          "text-mute": "rgba(220,226,242,0.45)",
+          // Fonds sombres (bleu marine — charte PDF)
+          bg: "#0B1B2E",
+          surface: "#12283F",
+          surface2: "#0E2337",
+          // Accent cyan (token "gold" conservé pour compat — valeur = cyan charte)
+          gold: "#17A2DC",
+          "gold-soft": "#5CC5EE",
+          // Texte sur fond sombre
+          text: "#EAF1F8",
+          "text-dim": "rgba(234,241,248,0.66)",
+          "text-mute": "rgba(234,241,248,0.45)",
           border: "rgba(255,255,255,0.10)",
-          "border-teal": "rgba(45,212,191,0.22)",
+          "border-teal": "rgba(23,162,220,0.28)",
+          // Sections claires (charte PDF)
+          light: "#EEF3F8",
+          "light-2": "#F6F9FC",
+          card: "#FFFFFF",
+          ink: "#0B1B2E",
+          "ink-dim": "#5A6B7B",
+          "ink-mute": "#8A98A6",
+          "light-border": "#DDE6EF",
         },
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
+        serif: ["var(--font-lora)", "Georgia", "Cambria", "serif"],
       },
       maxWidth: {
         container: "1280px",

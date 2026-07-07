@@ -62,7 +62,7 @@ export default function ADN() {
     <section className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="grid gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div>
-          <SectionTitle>
+          <SectionTitle onDark>
             Notre ADN :<br />
             <span className="text-sirius-gold">L'Excellence</span> au service
             <br />
@@ -91,14 +91,17 @@ export default function ADN() {
         </div>
 
 
-        {/* Image ADN */}
-        <div className="relative aspect-square w-full overflow-hidden rounded-[28px] border border-sirius-border">
+        {/* Image ADN — traitement duotone pour harmoniser avec la palette cyan/navy */}
+        <div className="relative aspect-square w-full overflow-hidden rounded-[28px] border border-sirius-border-teal">
           <Image
             src="/adn.png"
             alt="Salle de réunion Sirius Assurances"
             fill
-            className="object-cover"
+            className="object-cover [filter:saturate(0.8)_hue-rotate(-8deg)]"
           />
+          {/* Voile marine (bas) + lavis cyan pour neutraliser les tons dorés */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-sirius-bg/70 via-sirius-bg/10 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-sirius-gold/25 mix-blend-soft-light" />
         </div>
 
       </div>

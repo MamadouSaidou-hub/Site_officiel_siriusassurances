@@ -3,7 +3,8 @@ import { DOMMAGES } from "@/lib/data";
 
 export default function Dommages() {
   return (
-    <section id="dommages" className="mx-auto max-w-container px-6 py-24 lg:px-10">
+    <section id="dommages" className="bg-sirius-light">
+      <div className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="mb-12 text-center">
         <SectionLabel>Patrimoine &amp; actif</SectionLabel>
         <SectionTitle className="mx-auto mt-6 max-w-2xl">
@@ -17,7 +18,7 @@ export default function Dommages() {
         ))}
       </div>
 
-      <p className="mt-8 text-center text-sm text-sirius-text-mute">
+      <p className="mt-8 text-center text-sm text-sirius-ink-mute">
         Voir aussi :{" "}
         <a
           href="#specialisees"
@@ -26,6 +27,7 @@ export default function Dommages() {
           Assurance Transport &amp; Logistique
         </a>
       </p>
+      </div>
     </section>
   );
 }

@@ -28,20 +28,21 @@ export default async function Partners() {
         }));
 
   return (
-    <section className="mx-auto max-w-container px-6 py-24 lg:px-10">
+    <section className="bg-sirius-light-2">
+      <div className="mx-auto max-w-container px-6 py-24 lg:px-10">
       <div className="mb-12 text-center">
         <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-sirius-gold">
           Nos partenaires
         </p>
-        <p className="mx-auto mt-4 max-w-xl text-base text-sirius-text-dim">
+        <p className="mx-auto mt-4 max-w-xl text-base text-sirius-ink-dim">
           Nous collaborons avec les meilleures compagnies d'assurances nationales
           et internationales.
         </p>
       </div>
 
       <div
-        className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl sm:grid-cols-3 lg:grid-cols-6"
-        style={{ background: "rgba(255,255,255,0.1)" }}
+        className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-sirius-light-border sm:grid-cols-3 lg:grid-cols-6"
+        style={{ background: "#DDE6EF" }}
       >
         {cells.map((p, i) => {
           const inner = p.logo ? (
@@ -52,7 +53,7 @@ export default async function Partners() {
               className="max-h-12 w-auto max-w-full object-contain opacity-80 transition-opacity hover:opacity-100"
             />
           ) : (
-            <span className="text-xs font-semibold uppercase tracking-wider text-sirius-text-mute">
+            <span className="text-xs font-semibold uppercase tracking-wider text-sirius-ink-mute">
               {p.name}
             </span>
           );
@@ -60,7 +61,7 @@ export default async function Partners() {
           return (
             <div
               key={p.name || i}
-              className="flex aspect-[3/2] items-center justify-center bg-sirius-bg p-6"
+              className="flex aspect-[3/2] items-center justify-center bg-sirius-card p-6"
             >
               {p.website ? (
                 <a
@@ -78,6 +79,7 @@ export default async function Partners() {
             </div>
           );
         })}
+      </div>
       </div>
     </section>
   );

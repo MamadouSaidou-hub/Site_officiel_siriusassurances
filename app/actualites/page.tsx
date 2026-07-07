@@ -55,7 +55,7 @@ export default async function AllNewsPage() {
         <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-sirius-gold">
           Notre blog
         </p>
-        <h1 className="mt-4 text-[34px] font-extrabold leading-[1.15] text-sirius-text sm:text-[42px]">
+        <h1 className="mt-4 font-serif text-[34px] font-semibold leading-[1.15] text-sirius-text sm:text-[42px]">
           Actualités &amp; conseils
         </h1>
 
