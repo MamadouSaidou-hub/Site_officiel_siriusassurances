@@ -13,7 +13,7 @@ function Submit() {
       disabled={pending}
       className="rounded-full bg-sirius-gold px-7 py-3 text-sm font-bold text-sirius-bg disabled:opacity-60"
     >
-      {pending ? "Création..." : "Créer l'admin"}
+      {pending ? "Envoi de l'invitation..." : "Inviter l'utilisateur"}
     </button>
   );
 }
@@ -48,18 +48,21 @@ export default function CreateUserForm() {
       </div>
       <label className="block">
         <Span>
-          Mot de passe <span className="text-sirius-gold">*</span>
+          Rôle <span className="text-sirius-gold">*</span>
         </Span>
-        <input
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
-          placeholder="8 caractères minimum"
-          className={inputCls}
-        />
+        <select name="role" defaultValue="manager" className={inputCls}>
+          <option value="manager">Manager (rédige, ne publie pas)</option>
+          <option value="validateur">
+            Validateur (publie + gère les utilisateurs)
+          </option>
+        </select>
       </label>
+
+      <p className="text-xs text-sirius-text-mute">
+        Un email d'invitation sera envoyé ; l'utilisateur définira lui-même son
+        mot de passe.
+      </p>
+
       <div className="flex items-center gap-4">
         <Submit />
         {state.message && (
@@ -72,6 +75,20 @@ export default function CreateUserForm() {
           </span>
         )}
       </div>
+
+      {state.inviteLink && (
+        <div className="rounded-xl border border-sirius-border bg-sirius-bg p-4">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-sirius-text-mute">
+            Lien d'invitation (à partager si besoin)
+          </p>
+          <input
+            readOnly
+            value={state.inviteLink}
+            onFocus={(e) => e.currentTarget.select()}
+            className="w-full rounded-lg border border-sirius-border bg-sirius-surface px-3 py-2 text-xs text-sirius-text-dim outline-none"
+          />
+        </div>
+      )}
     </form>
   );
 }

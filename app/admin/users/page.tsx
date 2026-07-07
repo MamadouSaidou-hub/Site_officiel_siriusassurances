@@ -38,7 +38,7 @@ export default async function UsersAdminPage() {
       {/* Create */}
       <div className="mt-8 rounded-2xl border border-sirius-border bg-sirius-surface p-6 lg:p-8">
         <h2 className="mb-5 text-sm font-bold uppercase tracking-wider text-sirius-text-mute">
-          Créer un nouvel admin
+          Inviter un nouvel utilisateur
         </h2>
         <CreateUserForm />
       </div>
