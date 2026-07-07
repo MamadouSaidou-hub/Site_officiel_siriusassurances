@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { deleteArticle } from "@/app/actions/news";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { deleteArticle, setPublished } from "@/app/actions/news";
+import { Plus, Edit2, Trash2, Send, EyeOff } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +11,18 @@ export default async function NewsListPage() {
     .from("news_articles")
     .select("*")
     .order("created_at", { ascending: false });
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = user
+    ? await supabase
+        .from("profiles")
+        .select("is_superadmin")
+        .eq("id", user.id)
+        .single()
+    : { data: null };
+  const canPublish = !!profile?.is_superadmin;
 
   return (
     <div className="px-8 py-10 lg:px-12">
@@ -70,6 +82,21 @@ export default async function NewsListPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
+                    {canPublish && (
+                      <form action={setPublished.bind(null, a.id, !a.published)}>
+                        <button
+                          type="submit"
+                          className={
+                            a.published
+                              ? "text-sirius-text-mute hover:text-sirius-text"
+                              : "text-green-400 hover:text-green-300"
+                          }
+                          title={a.published ? "Dépublier" : "Publier"}
+                        >
+                          {a.published ? <EyeOff size={14} /> : <Send size={14} />}
+                        </button>
+                      </form>
+                    )}
                     <Link
                       href={`/admin/news/${a.id}/edit`}
                       className="text-sirius-gold hover:text-yellow-300"

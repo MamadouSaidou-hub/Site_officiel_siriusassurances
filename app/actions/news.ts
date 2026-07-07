@@ -74,6 +74,21 @@ async function uploadVideo(file: File): Promise<string | null> {
   return data.publicUrl;
 }
 
+/** Whether the current session belongs to a superadmin (the only role allowed to publish). */
+async function callerIsSuperadmin(): Promise<boolean> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return false;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_superadmin")
+    .eq("id", user.id)
+    .single();
+  return !!profile?.is_superadmin;
+}
+
 export async function createArticle(
   _prev: NewsActionState,
   formData: FormData
@@ -108,6 +123,10 @@ export async function createArticle(
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Seul un superadmin peut publier ; un manager crée toujours un brouillon.
+  const canPublish = await callerIsSuperadmin();
+  const published = canPublish && parsed.data.published;
+
   const { error } = await supabase.from("news_articles").insert({
     slug: parsed.data.slug,
     title: parsed.data.title,
@@ -117,8 +136,8 @@ export async function createArticle(
     video_embed_url: parsed.data.video_embed_url ?? null,
     video_url: videoUrl,
     tag: parsed.data.tag || null,
-    published: parsed.data.published,
-    published_at: parsed.data.published ? new Date().toISOString() : null,
+    published,
+    published_at: published ? new Date().toISOString() : null,
     author_id: user?.id ?? null,
   });
 
@@ -180,8 +199,14 @@ export async function updateArticle(
     .eq("id", id)
     .single();
 
-  const becamePublished =
-    parsed.data.published && existing && !existing.published;
+  // Seul un superadmin peut changer l'état de publication ; pour un manager,
+  // on conserve l'état existant (il édite le contenu, pas la publication).
+  const canPublish = await callerIsSuperadmin();
+  const published = canPublish
+    ? parsed.data.published
+    : existing?.published ?? false;
+
+  const becamePublished = published && existing && !existing.published;
 
   const { error } = await supabase
     .from("news_articles")
@@ -202,10 +227,12 @@ export async function updateArticle(
         : {}),
       video_embed_url: parsed.data.video_embed_url ?? null,
       tag: parsed.data.tag || null,
-      published: parsed.data.published,
+      published,
       published_at: becamePublished
         ? new Date().toISOString()
-        : existing?.published_at ?? null,
+        : published
+        ? existing?.published_at ?? null
+        : null,
     })
     .eq("id", id);
 
@@ -255,4 +282,34 @@ export async function deleteArticle(id: string): Promise<void> {
   await removeFromBucket(VIDEO_BUCKET, existing?.video_url);
 
   revalidatePath("/admin/news");
+}
+
+/** Publier / dépublier un article — réservé au superadmin (validation). */
+export async function setPublished(id: string, publish: boolean): Promise<void> {
+  if (!(await callerIsSuperadmin())) return;
+
+  const supabase = createClient();
+  const { data: existing } = await supabase
+    .from("news_articles")
+    .select("published_at")
+    .eq("id", id)
+    .single();
+
+  const { error } = await supabase
+    .from("news_articles")
+    .update({
+      published: publish,
+      published_at: publish
+        ? existing?.published_at ?? new Date().toISOString()
+        : null,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("[setPublished] update failed:", error);
+    return;
+  }
+
+  revalidatePath("/admin/news");
+  revalidatePath("/actualites");
 }

@@ -22,7 +22,14 @@ type Article = {
   published?: boolean;
 };
 
-export default function NewsForm({ article }: { article?: Article }) {
+export default function NewsForm({
+  article,
+  canPublish = false,
+}: {
+  article?: Article;
+  /** Seul un superadmin peut publier ; sinon l'article reste en brouillon. */
+  canPublish?: boolean;
+}) {
   const isEdit = !!article?.id;
   const action = isEdit
     ? updateArticle.bind(null, article!.id!)
@@ -69,18 +76,27 @@ export default function NewsForm({ article }: { article?: Article }) {
           placeholder="Réglementation, Conseil..."
           defaultValue={article?.tag ?? ""}
         />
-        <label className="flex items-center gap-3 self-end pb-1">
-          <input
-            type="checkbox"
-            name="published"
-            defaultChecked={article?.published}
-            value="true"
-            className="h-4 w-4 accent-sirius-gold"
-          />
-          <span className="text-sm font-semibold text-sirius-text">
-            Publier l'article
-          </span>
-        </label>
+        {canPublish ? (
+          <label className="flex items-center gap-3 self-end pb-1">
+            <input
+              type="checkbox"
+              name="published"
+              defaultChecked={article?.published}
+              value="true"
+              className="h-4 w-4 accent-sirius-gold"
+            />
+            <span className="text-sm font-semibold text-sirius-text">
+              Publier l'article
+            </span>
+          </label>
+        ) : (
+          <p className="self-end pb-1 text-xs text-sirius-text-mute">
+            🔒 Enregistré comme <b className="text-sirius-text-dim">brouillon</b>.
+            {article?.published
+              ? " Le statut de publication ne peut être modifié que par un validateur."
+              : " Un validateur pourra le publier après vérification."}
+          </p>
+        )}
       </div>
 
       <label className="block">

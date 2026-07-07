@@ -18,6 +18,18 @@ export default async function EditArticlePage({
 
   if (!article) notFound();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = user
+    ? await supabase
+        .from("profiles")
+        .select("is_superadmin")
+        .eq("id", user.id)
+        .single()
+    : { data: null };
+  const canPublish = !!profile?.is_superadmin;
+
   return (
     <div className="px-8 py-10 lg:px-12">
       <Link
@@ -34,7 +46,7 @@ export default async function EditArticlePage({
         Dernière mise à jour :{" "}
         {new Date(article.updated_at).toLocaleString("fr-FR")}
       </p>
-      <NewsForm article={article} />
+      <NewsForm article={article} canPublish={canPublish} />
     </div>
   );
 }
