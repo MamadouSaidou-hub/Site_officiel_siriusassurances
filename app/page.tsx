@@ -12,6 +12,7 @@ import Partners from "@/components/Partners";
 import Cta from "@/components/Cta";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import Chatbot from "@/components/Chatbot";
 
 export default function Page() {
   return (
@@ -30,6 +31,7 @@ export default function Page() {
       <Cta />
       <Contact />
       <Footer />
+      <Chatbot />
     </main>
   );
 }

@@ -10,6 +10,7 @@ import {
   Handshake,
   Users,
   UserCog,
+  Bot,
   LogOut,
 } from "lucide-react";
 import { logoutAdmin } from "@/app/actions/auth";
@@ -20,6 +21,7 @@ const ITEMS = [
   { href: "/admin/newsletter", label: "Newsletter", Icon: Mail },
   { href: "/admin/news", label: "Actualités", Icon: Newspaper },
   { href: "/admin/partners", label: "Partenaires", Icon: Handshake },
+  { href: "/admin/chatbot", label: "Chatbot", Icon: Bot },
   { href: "/admin/profile", label: "Mon profil", Icon: UserCog },
 ];
 

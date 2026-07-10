@@ -71,6 +71,16 @@ type ProfileRow = {
   created_at: string;
 };
 
+type ChatLogRow = {
+  id: string;
+  created_at: string;
+  session_id: string | null;
+  question: string;
+  answer: string | null;
+  model: string | null;
+  flagged: boolean;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -151,6 +161,20 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<ProfileRow>;
+        Relationships: [];
+      };
+      chat_logs: {
+        Row: ChatLogRow;
+        Insert: {
+          id?: string;
+          created_at?: string;
+          session_id?: string | null;
+          question: string;
+          answer?: string | null;
+          model?: string | null;
+          flagged?: boolean;
+        };
+        Update: Partial<ChatLogRow>;
         Relationships: [];
       };
     };
