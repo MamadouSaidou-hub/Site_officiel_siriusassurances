@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/lib/chatbot/knowledge";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "edge";
 
@@ -49,22 +48,37 @@ export async function POST(req: Request) {
   const question =
     [...history].reverse().find((m) => m.role === "user")?.content ?? "";
 
-  const groqRes = await fetch(GROQ_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      temperature: 0.3,
-      max_tokens: 1024,
-      stream: true,
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
-    }),
-  });
+  // Garde-fou : abandonne l'appel Groq s'il ne répond pas dans les temps.
+  const abortController = new AbortController();
+  const abortTimer = setTimeout(() => abortController.abort(), 30000);
+
+  let groqRes: Response;
+  try {
+    groqRes = await fetch(GROQ_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        temperature: 0.3,
+        max_tokens: 1024,
+        stream: true,
+        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+      }),
+      signal: abortController.signal,
+    });
+  } catch (e) {
+    clearTimeout(abortTimer);
+    return NextResponse.json(
+      { error: "Le service IA n'a pas répondu.", detail: String(e) },
+      { status: 504 }
+    );
+  }
 
   if (!groqRes.ok || !groqRes.body) {
+    clearTimeout(abortTimer);
     const detail = await groqRes.text().catch(() => "");
     return NextResponse.json(
       { error: `Erreur du service IA (${groqRes.status}).`, detail },
@@ -80,20 +94,34 @@ export async function POST(req: Request) {
   let answer = "";
   let logged = false;
 
-  // Journalise l'échange (best effort — n'interrompt jamais la réponse).
+  // Journalise l'échange via l'API REST Supabase (edge-native, borné à 3s).
+  // On évite @supabase/supabase-js qui peut stagner en edge runtime.
   async function logExchange() {
     if (logged) return;
     logged = true;
+    clearTimeout(abortTimer);
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) return;
     try {
-      const admin = createAdminClient();
-      await admin.from("chat_logs").insert({
-        session_id: sessionId,
-        question,
-        answer: answer || null,
-        model: MODEL,
+      await fetch(`${url}/rest/v1/chat_logs`, {
+        method: "POST",
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          question,
+          answer: answer || null,
+          model: MODEL,
+        }),
+        signal: AbortSignal.timeout(3000),
       });
     } catch {
-      // logging non bloquant
+      // best effort — jamais bloquant
     }
   }
 
@@ -131,6 +159,7 @@ export async function POST(req: Request) {
       }
     },
     cancel() {
+      clearTimeout(abortTimer);
       reader.cancel();
     },
   });
