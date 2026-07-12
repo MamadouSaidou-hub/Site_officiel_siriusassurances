@@ -109,7 +109,7 @@ export default function Chatbot() {
 
       {/* Panneau de chat */}
       {open && (
-        <div className="fixed bottom-24 right-5 z-50 flex h-[70vh] max-h-[560px] w-[min(92vw,380px)] flex-col overflow-hidden rounded-2xl border border-sirius-light-border bg-sirius-card shadow-2xl">
+        <div className="fixed inset-x-3 bottom-24 z-50 flex h-[70vh] max-h-[560px] flex-col overflow-hidden rounded-2xl border border-sirius-light-border bg-sirius-card shadow-2xl sm:inset-x-auto sm:right-5 sm:w-[380px]">
           {/* En-tête */}
           <div className="flex items-center gap-3 bg-sirius-bg px-4 py-3.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sirius-gold/15">
