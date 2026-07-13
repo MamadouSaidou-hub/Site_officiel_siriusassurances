@@ -85,7 +85,6 @@
 
 // code for image
 import Image from "next/image";
-import { ShieldCheck } from "lucide-react";
 import { SectionLabel } from "./ui";
 import { STATS } from "@/lib/data";
 
@@ -165,29 +164,8 @@ export default function Hero() {
             className="rounded-[28px] object-cover"
           />
 
-          {/* Dégradé marine discret (bas) pour l'unité avec la palette + lisibilité du badge */}
+          {/* Dégradé marine discret (bas) pour l'unité avec la palette */}
           <div className="pointer-events-none absolute inset-2 rounded-[28px] bg-gradient-to-t from-sirius-bg/60 via-transparent to-transparent" />
-
-
-          {/* Badge */}
-          <div className="absolute bottom-6 left-6 flex items-center gap-3 rounded-2xl bg-[#0a0f16]/85 px-4 py-3 backdrop-blur">
-
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sirius-gold">
-
-              <ShieldCheck
-                size={18}
-                className="text-sirius-bg"
-                strokeWidth={2.5}
-              />
-
-            </div>
-
-
-            <span className="text-sm font-semibold text-sirius-text">
-              Certifié Excellence 2024
-            </span>
-
-          </div>
 
 
         </div>
